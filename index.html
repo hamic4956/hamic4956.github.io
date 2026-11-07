@@ -1,21 +1,565 @@
-<!doctype html>
-<html lang="zh-TW">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="慢慢玩" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="theme-color" content="#111315" />
-    <title>慢慢玩 Slowly Travel</title>
-    <script type="module" crossorigin src="/assets/index-DYbp9bn7.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-D8iw8S2V.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvasist - Never Miss Another Assignment Deadline</title>
+<meta name="description" content="Canvasist is a tiny, private, open-source Windows app that merges every Canvas and Gradescope assignment into one list and reminds you before it's due. Free download for Windows.">
+<meta name="keywords" content="canvas, canvas-lms, deadline-reminder, gradescope, productivity, react, rust, students, tauri, windows">
+<meta name="author" content="Canvasist">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#4f46e5">
+<link rel="canonical" href="https://github.com/hamic4956/Canvasist">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Canvasist - Never Miss Another Assignment Deadline">
+<meta property="og:description" content="A tiny, private, open-source Windows app that merges every Canvas and Gradescope assignment into one list and reminds you before it's due.">
+<meta property="og:url" content="https://github.com/hamic4956/Canvasist">
+<meta property="og:site_name" content="Canvasist">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Canvasist - Never Miss Another Assignment Deadline">
+<meta name="twitter:description" content="One list for Canvas and Gradescope deadlines. Free, private, open-source Windows app for students.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Canvasist",
+  "operatingSystem": "Windows",
+  "applicationCategory": "ProductivityApplication",
+  "description": "A tiny, private, open-source Windows app that merges every Canvas and Gradescope assignment into one list and reminds you before it's due.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "url": "https://github.com/hamic4956/Canvasist/releases"
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fb;
+    background-image: linear-gradient(180deg, #eef2ff 0%, #f5f7fb 320px, #f5f7fb 100%);
+    color: #26303f;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 48px 22px 80px 22px;
+  }
+  h1 {
+    font-size: 2.35rem;
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #101827;
+    margin: 0 0 18px 0;
+  }
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #182135;
+    margin: 46px 0 14px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e7f0;
+  }
+  h3 {
+    font-size: 1.06rem;
+    font-weight: 700;
+    color: #1f2a3d;
+    margin: 24px 0 6px 0;
+  }
+  p { margin: 0 0 16px 0; }
+  ul { margin: 0 0 18px 0; padding-left: 22px; }
+  li { margin-bottom: 9px; }
+  a { color: #4338ca; text-decoration: underline; }
+  a:hover { color: #312e81; }
+  .lede {
+    font-size: 1.14rem;
+    color: #3c4759;
+    margin-bottom: 26px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 16px 34px;
+    font-size: 1.06rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    background-image: linear-gradient(135deg, #7c3aed 0%, #2563eb 55%, #06b6d4 100%);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.36);
+  }
+  .btn-row {
+    margin: 30px 0 10px 0;
+  }
+  .btn-note {
+    font-size: 0.9rem;
+    color: #6b7party;
+    color: #6b7688;
+    margin-top: 12px;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #e6ebf4;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(24, 33, 53, 0.05);
+  }
+  .card h3 { margin-top: 0; }
+  .highlight {
+    background: #ffffff;
+    border-left: 4px solid #7c3aed;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 22px 0;
+    box-shadow: 0 2px 10px rgba(24, 33, 53, 0.05);
+    font-size: 1.02rem;
+  }
+  .steps {
+    background: #ffffff;
+    border: 1px solid #e6ebf4;
+    border-radius: 14px;
+    padding: 10px 26px 6px 26px;
+    margin: 22px 0;
+    box-shadow: 0 2px 10px rgba(24, 33, 53, 0.05);
+  }
+  .steps ol { padding-left: 20px; }
+  .steps li { margin: 14px 0; }
+  code {
+    background: #eef1f8;
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 0.92em;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  .faq-q {
+    font-weight: 700;
+    color: #1f2a3d;
+    margin: 22px 0 4px 0;
+  }
+  .faq-a { margin: 0 0 6px 0; }
+  footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid #e2e7f0;
+    font-size: 0.92rem;
+    color: #6b7688;
+  }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .wrap { padding: 32px 16px 60px 16px; }
+    h1 { font-size: 1.78rem; }
+    h2 { font-size: 1.24rem; margin-top: 36px; }
+    .btn { display: block; text-align: center; padding: 15px 20px; }
+    .card, .steps, .highlight { padding: 18px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>🎓 Canvasist - Never Miss Another Assignment Deadline</h1>
+
+  <p class="lede">Canvasist is a tiny, private, open-source Windows app that pulls every assignment from Canvas and Gradescope into one clean list, then reminds you before it's due. No more tab-hopping. No more "I thought that was due Friday."</p>
+
+  <div class="btn-row">
+    <a class="btn" href="https://github.com/hamic4956/Canvasist/releases">Download Canvasist for Windows</a>
+    <p class="btn-note">Free • Open source • Runs on your own computer</p>
+  </div>
+
+  <h2>🧭 What Canvasist Actually Does</h2>
+  <p>Most students juggle two or three websites just to find out what is due. Canvas says one thing, Gradescope says another, and somewhere in between an announcement quietly changes a date. Canvasist fixes that by collecting all of it in one place.</p>
+  <p>When you open Canvasist, you get a single, simple list. Every assignment, quiz, discussion post, and Gradescope submission appears together, sorted by the moment it is due. The next deadline is always at the top, so you never have to go hunting for it.</p>
+  <p>The app sits quietly in your system tray while you study, and pops up a friendly reminder before something is about to close. That's the whole idea: less checking, fewer surprises.</p>
+
+  <h2>✨ Why Students Keep It Installed</h2>
+
+  <div class="card">
+    <h3>📚 One list for Canvas and Gradescope</h3>
+    <p>Two platforms, one feed. Canvasist merges your deadlines from both sources and shows them in a single chronological view, so a Gradescope lab and a Canvas discussion never compete for your attention in separate browser tabs.</p>
+  </div>
+
+  <div class="card">
+    <h3>⏰ Reminders that arrive before it's too late</h3>
+    <p>You choose how much warning you want — a day ahead, a few hours, or both. Canvasist sends a normal Windows notification with the assignment name and the exact due time. You can adjust the timing for each reminder type, or snooze one when you're in the middle of something.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Everything important at a glance</h3>
+    <p>Each item shows its class, its platform, and its due date. Upcoming work is grouped clearly, and anything overdue is highlighted so it can't hide at the bottom of a long list. A quick scan in the morning tells you exactly where you stand.</p>
+  </div>
+
+  <div class="card">
+    <h3>🪶 Tiny and light on your laptop</h3>
+    <p>Canvasist is built with Rust and Tauri, which means a small download, a fast launch, and very little memory in use while it runs in the background. It won't slow down your machine during a lecture or while you're writing a paper at 2 a.m.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔒 Private by design</h3>
+    <p>Your assignment data and your login details stay on your own computer. There is no Canvasist account to create and no server collecting your grades. Because the project is open source, anyone can inspect exactly what the app does and how it handles your information.</p>
+  </div>
+
+  <div class="card">
+    <h3>🆓 Free and open source</h3>
+    <p>No subscription, no premium tier, no ads. Canvasist is a student-friendly project maintained in the open, and the full source code is available for anyone who wants to learn from it or help improve it.</p>
+  </div>
+
+  <h2>🖥️ Download and Install on Windows</h2>
+  <p>Getting Canvasist onto your PC takes about a minute.</p>
+
+  <div class="steps">
+    <ol>
+      <li>Open the official releases page by visiting this link: <a href="https://github.com/hamic4956/Canvasist/releases">https://github.com/hamic4956/Canvasist/releases</a></li>
+      <li>Visit this link to download the application. Pick the newest release listed at the top of the page — that one has the latest fixes and features.</li>
+      <li>Once the download finishes, open Canvasist and follow the short on-screen prompts to connect your accounts.</li>
+    </ol>
+  </div>
+
+  <div class="highlight">
+    <strong>Direct download:</strong> <a href="https://github.com/hamic4956/Canvasist/releases">https://github.com/hamic4956/Canvasist/releases</a><br>
+    Visit this link to download the application. It always points to the newest official version, so bookmark it for future updates.
+  </div>
+
+  <h2>🚀 Setting It Up for the First Time</h2>
+  <p>The first launch is a short, guided setup. Nothing technical is required, and you can always come back to these settings later from the app menu.</p>
+
+  <h3>Step 1 — Connect your Canvas account</h3>
+  <p>Canvasist asks for your school's Canvas web address, the same one you type into your browser to reach your courses. It then opens your school's normal sign-in page, where you log in exactly as you always do. Canvasist never asks for your password directly and never stores it.</p>
+
+  <h3>Step 2 — Connect your Gradescope account</h3>
+  <p>The same idea applies here. You sign in through the regular Gradescope page in your own browser, and Canvasist is given permission to read your course list and assignment dates. That permission is limited to reading deadlines — it is not there to change anything, submit anything, or post on your behalf.</p>
+
+  <h3>Step 3 — Pick your reminder timing</h3>
+  <p>Choose how far ahead you want to be warned. Many students use two reminders: one the evening before, and one a couple of hours before the deadline. You can change this at any time, and you can pause reminders during quiet hours if you study late.</p>
+
+  <h3>Step 4 — Let it run in the background</h3>
+  <p>Once your accounts are connected, Canvasist keeps your list fresh automatically and stays out of your way in the system tray. Double-click the tray icon whenever you want to see your deadlines.</p>
+
+  <h2>🔔 How the Reminders Behave</h2>
+  <p>Canvasist uses standard Windows notifications, which means reminders appear the same way your email or calendar alerts do. Each notification names the assignment, the course, and the exact time it closes. You can click a reminder to jump straight to that assignment in your browser, or dismiss it and get back to work.</p>
+  <p>If a deadline is changed by your instructor, Canvasist picks up the new date on its next refresh and adjusts your reminders to match. You do not need to delete or re-create anything by hand.</p>
+  <p>Reminders only fire while the app is running. If you close it completely, notifications stop until you open it again — so for most people, leaving it in the tray is the right choice.</p>
+
+  <h2>🔐 Privacy and Your Data</h2>
+  <p>Everything Canvasist knows about your courses lives in a local file on your own PC. There is no cloud sync, no telemetry dashboard, and no third-party analytics service bundled in. The app talks to Canvas and Gradescope only to read your assignments, and it talks to nothing else.</p>
+  <p>If you want to disconnect an account, you can log out from inside Canvasist, which removes the stored access from your computer. You can also revoke access from your school's Canvas account settings at any time, just like any other connected app.</p>
+
+  <h2>❓ Frequently Asked Questions</h2>
+
+  <p class="faq-q">Is Canvasist really free?</p>
+  <p class="faq-a">Yes. There is no paid version, no trial period, and no advertising. It is an open-source project built for students.</p>
+
+  <p class="faq-q">Do I have to give Canvasist my password?</p>
+  <p class="faq-a">No. You sign in on your school's official Canvas and Gradescope pages, in your own browser. Canvasist receives a limited permission token, which it stores on your computer so it can read your deadline list.</p>
+
+  <p class="faq-q">Will it work with my school?</p>
+  <p class="faq-a">Canvasist works with any institution that uses Canvas or Gradescope, including schools that sign you in through a single university login page. If you can reach your courses in a browser, you can connect them.</p>
+
+  <p class="faq-q">Does it submit my assignments for me?</p>
+  <p class="faq-a">No. Canvasist is read-only. It collects deadlines and reminds you about them. All submitting still happens on Canvas or Gradescope, where it belongs.</p>
+
+  <p class="faq-q">What happens when a semester ends?</p>
+  <p class="faq-a">Finished courses simply stop producing new deadlines and drop out of your active view. Your history stays on your computer until you clear it. If you stop using Canvasist entirely, uninstalling it removes the local data.</p>
+
+  <h2>🛠️ If Something Isn't Working</h2>
+  <p><strong>My assignments aren't showing up.</strong> Open the app and press refresh. If the list is still empty, check that you're signed in to both platforms under Settings — an expired session is the most common cause.</p>
+  <p><strong>I'm not getting reminders.</strong> Make sure Canvasist is still running in your system tray, and confirm that notifications are allowed for the app in Windows Settings<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvasist - Never Miss Another Assignment Deadline</title>
+<meta name="description" content="Canvasist is a tiny, private, open-source Windows app that merges every Canvas and Gradescope assignment into one list and reminds you before it's due. Free download for Windows.">
+<meta name="keywords" content="canvas, canvas-lms, deadline-reminder, gradescope, productivity, react, rust, students, tauri, windows">
+<meta name="author" content="Canvasist">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#4f46e5">
+<link rel="canonical" href="https://github.com/hamic4956/Canvasist">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Canvasist - Never Miss Another Assignment Deadline">
+<meta property="og:description" content="A tiny, private, open-source Windows app that merges every Canvas and Gradescope assignment into one list and reminds you before it's due.">
+<meta property="og:url" content="https://github.com/hamic4956/Canvasist">
+<meta property="og:site_name" content="Canvasist">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Canvasist - Never Miss Another Assignment Deadline">
+<meta name="twitter:description" content="One list for Canvas and Gradescope deadlines. Free, private, open-source Windows app for students.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Canvasist",
+  "operatingSystem": "Windows",
+  "applicationCategory": "ProductivityApplication",
+  "description": "A tiny, private, open-source Windows app that merges every Canvas and Gradescope assignment into one list and reminds you before it's due.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "url": "https://github.com/hamic4956/Canvasist/releases"
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fb;
+    background-image: linear-gradient(180deg, #eef2ff 0%, #f5f7fb 320px, #f5f7fb 100%);
+    color: #26303f;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 48px 22px 80px 22px;
+  }
+  h1 {
+    font-size: 2.35rem;
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #101827;
+    margin: 0 0 18px 0;
+  }
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #182135;
+    margin: 46px 0 14px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e7f0;
+  }
+  h3 {
+    font-size: 1.06rem;
+    font-weight: 700;
+    color: #1f2a3d;
+    margin: 24px 0 6px 0;
+  }
+  p { margin: 0 0 16px 0; }
+  ol { margin: 0 0 18px 0; padding-left: 24px; }
+  li { margin-bottom: 9px; }
+  a { color: #4338ca; text-decoration: underline; }
+  a:hover { color: #312e81; }
+  .lede {
+    font-size: 1.14rem;
+    color: #3c4759;
+    margin-bottom: 26px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 16px 34px;
+    font-size: 1.06rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    background-image: linear-gradient(135deg, #7c3aed 0%, #2563eb 55%, #06b6d4 100%);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.36);
+  }
+  .btn-row { margin: 30px 0 10px 0; }
+  .btn-note {
+    font-size: 0.9rem;
+    color: #6b7688;
+    margin-top: 12px;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #e6ebf4;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(24, 33, 53, 0.05);
+  }
+  .card h3 { margin-top: 0; }
+  .highlight {
+    background: #ffffff;
+    border-left: 4px solid #7c3aed;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 22px 0;
+    box-shadow: 0 2px 10px rgba(24, 33, 53, 0.05);
+    font-size: 1.02rem;
+  }
+  .steps {
+    background: #ffffff;
+    border: 1px solid #e6ebf4;
+    border-radius: 14px;
+    padding: 14px 26px 8px 26px;
+    margin: 22px 0;
+    box-shadow: 0 2px 10px rgba(24, 33, 53, 0.05);
+  }
+  .steps li { margin: 14px 0; }
+  .faq-q {
+    font-weight: 700;
+    color: #1f2a3d;
+    margin: 22px 0 4px 0;
+  }
+  .faq-a { margin: 0 0 6px 0; }
+  footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid #e2e7f0;
+    font-size: 0.92rem;
+    color: #6b7688;
+  }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .wrap { padding: 32px 16px 60px 16px; }
+    h1 { font-size: 1.78rem; }
+    h2 { font-size: 1.24rem; margin-top: 36px; }
+    .btn { display: block; text-align: center; padding: 15px 20px; }
+    .card, .steps, .highlight { padding: 18px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>🎓 Canvasist - Never Miss Another Assignment Deadline</h1>
+
+  <p class="lede">Canvasist is a tiny, private, open-source Windows app that pulls every assignment from Canvas and Gradescope into one clean list, then reminds you before it's due. No more tab-hopping, no more "I thought that was due Friday."</p>
+
+  <div class="btn-row">
+    <a class="btn" href="https://github.com/hamic4956/Canvasist/releases">Download Canvasist for Windows</a>
+    <p class="btn-note">Free • Open source • Runs on your own computer</p>
+  </div>
+
+  <h2>🧭 What Canvasist Actually Does</h2>
+  <p>Most students juggle two or three websites just to find out what is due. Canvas says one thing, Gradescope says another, and somewhere in between an announcement quietly changes a date. Canvasist fixes that by collecting all of it in one place.</p>
+  <p>When you open Canvasist, you get a single, simple list. Every assignment, quiz, discussion post, and Gradescope submission appears together, sorted by the moment it is due. The next deadline is always at the top, so you never have to go hunting for it.</p>
+  <p>The app sits quietly in your system tray while you study and pops up a friendly reminder before something is about to close. That is the whole idea: less checking, fewer surprises.</p>
+
+  <h2>✨ Why Students Keep It Installed</h2>
+
+  <div class="card">
+    <h3>📚 One list for Canvas and Gradescope</h3>
+    <p>Two platforms, one feed. Canvasist merges your deadlines from both sources and shows them in a single chronological view, so a Gradescope lab and a Canvas discussion never compete for your attention in separate browser tabs.</p>
+  </div>
+
+  <div class="card">
+    <h3>⏰ Reminders that arrive before it's too late</h3>
+    <p>You choose how much warning you want — a day ahead, a few hours, or both. Canvasist sends a normal Windows notification with the assignment name and the exact due time. You can adjust the timing for each reminder, or snooze one when you are in the middle of something.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Everything important at a glance</h3>
+    <p>Each item shows its class, its platform, and its due date. Upcoming work is grouped clearly, and anything overdue is highlighted so it cannot hide at the bottom of a long list. A quick scan in the morning tells you exactly where you stand.</p>
+  </div>
+
+  <div class="card">
+    <h3>🪶 Tiny and light on your laptop</h3>
+    <p>Canvasist is built with Rust and Tauri, which means a small download, a fast launch, and very little memory in use while it runs in the background. It will not slow down your machine during a lecture or while you are writing a paper at 2 a.m.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔒 Private by design</h3>
+    <p>Your assignment data and your login details stay on your own computer. There is no Canvasist account to create and no server collecting your grades. Because the project is open source, anyone can inspect exactly what the app does and how it handles your information.</p>
+  </div>
+
+  <div class="card">
+    <h3>🆓 Free and open source</h3>
+    <p>No subscription, no premium tier, no ads. Canvasist is a student-friendly project maintained in the open, and the full source code is available for anyone who wants to learn from it or help improve it.</p>
+  </div>
+
+  <h2>🖥️ Download and Install on Windows</h2>
+  <p>Getting Canvasist onto your PC takes about a minute. There is nothing to compile and nothing to configure by hand.</p>
+
+  <div class="steps">
+    <ol>
+      <li>Open the official releases page by clicking this link: <a href="https://github.com/hamic4956/Canvasist/releases">https://github.com/hamic4956/Canvasist/releases</a></li>
+      <li>Visit this link to download the application. Choose the newest release listed at the top of that page — it contains the latest fixes and features.</li>
+      <li>When the download finishes, open Canvasist and follow the short on-screen prompts to connect your accounts.</li>
+    </ol>
+  </div>
+
+  <div class="highlight">
+    <strong>Direct download:</strong> <a href="https://github.com/hamic4956/Canvasist/releases">https://github.com/hamic4956/Canvasist/releases</a><br>
+    Visit this link to download the application. It always points to the newest official version, so bookmark it for future updates.
+  </div>
+
+  <h2>🚀 Setting It Up for the First Time</h2>
+  <p>The first launch is a short, guided setup. Nothing technical is required, and you can always return to these settings later from the app menu.</p>
+
+  <h3>Step 1 — Connect your Canvas account</h3>
+  <p>Canvasist asks for your school's Canvas web address, the same one you type into your browser to reach your courses. It then opens your school's normal sign-in page, where you log in exactly as you always do. Canvasist never asks for your password directly and never stores it.</p>
+
+  <h3>Step 2 — Connect your Gradescope account</h3>
+  <p>The same idea applies here. You sign in through the regular Gradescope page in your own browser, and Canvasist is given permission to read your course list and assignment dates. That permission is limited to reading deadlines — it is not there to change anything, submit anything, or post on your behalf.</p>
+
+  <h3>Step 3 — Pick your reminder timing</h3>
+  <p>Choose how far ahead you want to be warned. Many students use two reminders: one the evening before and one a couple of hours before the deadline. You can change this at any time, and you can pause reminders during quiet hours if you study late.</p>
+
+  <h3>Step 4 — Let it run in the background</h3>
+  <p>Once your accounts are connected, Canvasist keeps your list fresh automatically and stays out of your way in the system tray. Double-click the tray icon whenever you want to see your deadlines.</p>
+
+  <h2>🔔 How the Reminders Behave</h2>
+  <p>Canvasist uses standard Windows notifications, which means reminders appear the same way your email or calendar alerts do. Each notification names the assignment, the course, and the exact time it closes. You can click a reminder to jump straight to that assignment in your browser, or dismiss it and get back to work.</p>
+  <p>If a deadline is changed by your instructor, Canvasist picks up the new date on its next refresh and adjusts your reminders to match. You do not need to delete or re-create anything by hand.</p>
+  <p>Reminders only fire while the app is running. If you close it completely, notifications stop until you open it again — so for most people, leaving it in the tray is the right choice.</p>
+
+  <h2>🔐 Privacy and Your Data</h2>
+  <p>Everything Canvasist knows about your courses lives in a local file on your own PC. There is no cloud sync, no telemetry dashboard, and no third-party analytics service bundled in. The app talks to Canvas and Gradescope only to read your assignments, and it talks to nothing else.</p>
+  <p>If you want to disconnect an account, you can sign out from inside Canvasist, which removes the stored access from your computer. You can also revoke access from your school's Canvas account settings at any time, just like any other connected app.</p>
+
+  <h2>❓ Frequently Asked Questions</h2>
+
+  <p class="faq-q">Is Canvasist really free?</p>
+  <p class="faq-a">Yes. There is no paid version, no trial period, and no advertising. It is an open-source project built for students.</p>
+
+  <p class="faq-q">Do I have to give Canvasist my password?</p>
+  <p class="faq-a">No. You sign in on your school's official Canvas and Gradescope pages, in your own browser. Canvasist receives a limited permission token, which it stores on your computer so it can read your deadline list.</p>
+
+  <p class="faq-q">Will it work with my school?</p>
+  <p class="faq-a">Canvasist works with any institution that uses Canvas or Gradescope, including schools that sign you in through a single university login page. If you can reach your courses in a browser, you can connect them.</p>
+
+  <p class="faq-q">Does it submit my assignments for me?</p>
+  <p class="faq-a">No. Canvasist is read-only. It collects deadlines and reminds you about them. All submitting still happens on Canvas or Gradescope, where it belongs.</p>
+
+  <p class="faq-q">What happens when a semester ends?</p>
+  <p class="faq-a">Finished courses simply stop producing new deadlines and drop out of your active view. Your history stays on your computer until you clear it. If you stop using Canvasist entirely, uninstalling it removes the local data.</p>
+
+  <h2>🛠️ If Something Isn't Working</h2>
+  <p><strong>My assignments aren't showing up.</strong> Open the app and press refresh. If the list is still empty, check that you are signed in to both platforms under Settings — an expired session is the most common cause.</p>
+  <p><strong>I'm not getting reminders.</strong> Make sure Canvasist is still running in your system tray, and confirm that notifications are allowed for the app in Windows Settings.</p>
+  <p><strong>The dates look wrong.</strong> Check the time zone shown in the app settings. Canvasist uses your computer's clock, so a laptop set to the wrong region will show the wrong due times.</p>
+
+  <h2>🤝 About the Project</h2>
+  <p>Canvasist is built for students, by people who got tired of missing things. It is written with Rust and Tauri on the desktop side, with a React interface, and it is published as open source so it can be trusted, audited, and improved by the people who use it.</p>
+  <p>If you find a bug or have an idea for a feature, the repository is the right place to share it. If you simply find the app useful, telling a classmate is the best way to help it grow.</p>
+
+  <div class="highlight">
+    <strong>Ready to try it?</strong> <a href="https://github.com/hamic4956/Canvasist/releases">Visit this link to download the application</a> and get every deadline into one place today.
+  </div>
+
+  <footer>
+    Canvasist is free, open-source software for Windows. Keywords: canvas, canvas-lms, deadline-reminder, gradescope, productivity, students, tauri, windows.
+  </footer>
+
+</div>
+</body>
 </html>
